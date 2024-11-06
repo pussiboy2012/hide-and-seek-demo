@@ -96,7 +96,7 @@ const removeHint = async (id, hintToRemove) => {
   return (
     <div className="App">
       
-
+      <h1><b>ВСЕМ  ИГРОКАМ ПРИГОТОВИТЬСЯ</b></h1>
       {/* Кнопка для открытия модального окна */}
       <button onClick={openModal} className="add-player-button">
         <b>Добавить участника</b>
@@ -127,11 +127,8 @@ const removeHint = async (id, hintToRemove) => {
         <button onClick={closeModal}>Отмена</button>
       </Modal>
 
-      
-
       <div className="players-list">
         <div className="active-players">
-        <b><h2>Прячутся</h2></b>
           {players.filter(player => player.status === 'Спрятался').map(player => (
             <div key={player.id} className="player Спрятался">
               <b><p>{player.name}</p></b>

@@ -2,11 +2,11 @@
 
 /* Основной стиль приложения */
 .App {
-  padding-top: 200px;
+  padding-top: 100px;
   font-family: Arial, sans-serif;
   text-align: center;
   background-image: url('../public/main_BG.svg');
-  background-repeat: no-repeat, repeat;
+  background-repeat: repeat;
   background-size: 100%;
   background-position: top;
   min-height: 100vh;
@@ -20,7 +20,8 @@
   width: 60%;
   max-width: 800px;
   margin: 20px;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(54, 54, 54, 0.8);
+  padding-top: 20px;
   padding-left: 40px;
   padding-right: 40px;
   border-radius: 8px;
@@ -30,6 +31,11 @@
   .players-list {
     width: 80%;
   }
+}
+
+h2,h1{
+  color: white;
+
 }
 
 .active-players, .inactive-players {
@@ -85,7 +91,7 @@ button:focus {
 
 .divider {
   width: 100%;
-  border-top: 4px solid #696969;
+  border-top: 4px solid #ffffff;
   margin: 10px 0;
 }
 
@@ -97,6 +103,9 @@ button:focus {
   cursor: pointer;
   font-size: 16px;
   border-radius: 5px;
+}
+.add-player-button:hover{
+  background-color: #2b612d;
 }
 
 .Modal {
