@@ -52,10 +52,13 @@ function App() {
   };
 
   const rebootGame = async () => {
+    const confirmReboot = window.confirm("Вы уверены, что хотите перезапустить игру?");
+    if (!confirmReboot) return;
+  
     const batch = writeBatch(db);
     const playersCollection = collection(db, 'players');
     const snapshot = await getDocs(playersCollection);
-    
+  
     snapshot.forEach(playerDoc => { 
       const playerRef = doc(db, 'players', playerDoc.id);
       batch.update(playerRef, {
@@ -63,9 +66,10 @@ function App() {
         hints: []
       });
     });
-
+  
     await batch.commit();
   };
+  
   
 
   const addHint = async (id) => {
