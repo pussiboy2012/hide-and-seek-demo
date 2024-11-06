@@ -1,47 +1,205 @@
 /* src/App.css */
 
+/* Основной стиль приложения */
 .App {
+  padding-top: 200px;
   font-family: Arial, sans-serif;
   text-align: center;
+  background-image: url('../public/main_BG.svg');
+  background-repeat: no-repeat, repeat;
+  background-size: 100%;
+  background-position: top;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .players-list {
+  width: 60%;
+  max-width: 800px;
+  margin: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding-left: 40px;
+  padding-right: 40px;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .players-list {
+    width: 80%;
+  }
+}
+
+.active-players, .inactive-players {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  margin-top: 20px;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .player {
   border: 1px solid #ccc;
-  padding: 10px;
-  width: 200px;
+  padding: 15px;
+  margin: 5px;
+  width: 100%;
   border-radius: 8px;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-.player p {
-  margin: 5px 0;
+.Спрятался {
+  background-color: #007bff;
+  color: white;
+}
+
+.Найден {
+  background: linear-gradient(to right, #007bff 50%, #ff4d4d 50%);
+  color: white;
+}
+
+.Inactive {
+  background-color: #ccc;
+  color: black;
 }
 
 button {
-  background-color: #007bff;
+  background-color: orange;
   color: white;
   border: none;
   padding: 8px 12px;
   cursor: pointer;
   border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #ff8c00;
 }
 
-.Sprятался {
-  color: green;
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.5);
 }
 
-.Найден {
+.divider {
+  width: 100%;
+  border-top: 4px solid #696969;
+  margin: 10px 0;
+}
+
+.add-player-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.Modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+  max-width: 300px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.hint-button {
+  cursor: pointer;
+  font-size: 24px;
+  margin-left: 10px;
+}
+
+.hint-input {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
+  width: 80%;
+}
+
+.hint {
+  font-style: italic;
+  font-weight: bold;
+  text-align: left;
+  color: #2c2c2c;
+}
+
+.reboot-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.reboot-button:hover {
+  background-color: darkred;
+}
+
+.reboot-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.5);
+}
+
+.remove-hint-button {
+  background: none;
+  border: none;
   color: red;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.hint-text {
+  flex-grow: 1;
+}
+
+.remove-hint-button {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 18px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px; /* расстояние между кнопками */
+  margin-bottom: 20px; /* отступ снизу для контейнера кнопок */
+}
+
+.add-player-button,
+.reboot-button {
+  flex: 1; /* кнопки будут равной ширины */
 }
