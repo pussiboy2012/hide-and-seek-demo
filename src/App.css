@@ -166,6 +166,14 @@ button:focus {
   gap: 10px;
 }
 
+.admin_panel{
+  color: black;
+  padding: 0px;
+  padding-bottom: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
 .Overlay {
   position: fixed;
   top: 0;
@@ -177,7 +185,7 @@ button:focus {
 
 .hint-button {
   cursor: pointer;
-  font-size: 24px;
+  font-size: 14px;
   margin-left: 10px;
 }
 
@@ -251,4 +259,45 @@ button:focus {
 .add-player-button,
 .reboot-button {
   flex: 1; /* кнопки будут равной ширины */
+}
+
+
+.footer {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  text-align: center;
+  padding: 20px 0;
+  position: relative;
+  width: 100%;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-text {
+  margin: 0;
+  font-size: 14px;
+}
+
+.footer-buttons {
+  margin-top: 10px;
+}
+
+.admin-login-button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.admin-login-button:hover {
+  background-color: #2980b9;
 }

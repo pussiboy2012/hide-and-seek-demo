@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { db } from './firebase';
-import { collection, onSnapshot, updateDoc, doc, addDoc, deleteDoc, writeBatch, getDocs} from "firebase/firestore";
+import { collection, onSnapshot, updateDoc, doc, addDoc, deleteDoc, writeBatch, getDocs } from "firebase/firestore";
 import './App.css';
 
 Modal.setAppElement('#root');
@@ -13,6 +13,9 @@ function App() {
   const [status, setStatus] = useState('Спрятался');
   const [hintInput, setHintInput] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
 
   useEffect(() => {
     const playersCollection = collection(db, 'players');
@@ -23,12 +26,19 @@ function App() {
     return unsubscribe;
   }, []);
 
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
 
-  const closeModal = () => {
-    setModalIsOpen(false);
+  const openLoginModal = () => setLoginModalIsOpen(true);
+  const closeLoginModal = () => setLoginModalIsOpen(false);
+
+  const handleAdminLogin = () => {
+    if (passwordInput === 'Admin123') {
+      setIsAdmin(true);
+      closeLoginModal();
+    } else {
+      alert("Неверный пароль!");
+    }
   };
 
   const addPlayer = async () => {
@@ -47,81 +57,76 @@ function App() {
   };
 
   const removePlayer = async (id) => {
-    const playerRef = doc(db, 'players', id);
-    await deleteDoc(playerRef);
+    if (isAdmin) {
+      const playerRef = doc(db, 'players', id);
+      await deleteDoc(playerRef);
+    }
   };
 
   const rebootGame = async () => {
-    const confirmReboot = window.confirm("Вы уверены, что хотите перезапустить игру?");
-    if (!confirmReboot) return;
-  
-    const batch = writeBatch(db);
-    const playersCollection = collection(db, 'players');
-    const snapshot = await getDocs(playersCollection);
-  
-    snapshot.forEach(playerDoc => { 
-      const playerRef = doc(db, 'players', playerDoc.id);
-      batch.update(playerRef, {
-        status: 'Вне игры',
-        hints: []
+    if (isAdmin && window.confirm("Вы уверены, что хотите перезапустить игру?")) {
+      const batch = writeBatch(db);
+      const playersCollection = collection(db, 'players');
+      const snapshot = await getDocs(playersCollection);
+      snapshot.forEach(playerDoc => {
+        const playerRef = doc(db, 'players', playerDoc.id);
+        batch.update(playerRef, { status: 'Вне игры', hints: [] });
       });
-    });
-  
-    await batch.commit();
+      await batch.commit();
+    }
   };
-  
-  
 
   const addHint = async (id) => {
     const playerRef = doc(db, 'players', id);
     const player = players.find(player => player.id === id);
-    
     if (player) {
       const hints = Array.isArray(player.hints) ? player.hints : [];
-      await updateDoc(playerRef, {
-        hints: [...hints, hintInput],
-      });
+      await updateDoc(playerRef, { hints: [...hints, hintInput] });
       setHintInput('');
     }
   };
 
-const removeHint = async (id, hintToRemove) => {
-  const playerRef = doc(db, 'players', id);
-  const player = players.find(player => player.id === id);
-
-  if (player) {
-    const updatedHints = player.hints.filter(hint => hint !== hintToRemove);
-    await updateDoc(playerRef, {
-      hints: updatedHints,
-    });
-  }
-};
+  const removeHint = async (id, hintToRemove) => {
+    if (isAdmin) {
+      const playerRef = doc(db, 'players', id);
+      const player = players.find(player => player.id === id);
+      if (player) {
+        const updatedHints = player.hints.filter(hint => hint !== hintToRemove);
+        await updateDoc(playerRef, { hints: updatedHints });
+      }
+    }
+  };
 
   return (
     <div className="App">
+      <h1><b>ВСЕМ ИГРОКАМ ПРИГОТОВИТЬСЯ</b></h1>
+      <button onClick={openModal} className="add-player-button"><b>Зайти в игру!</b></button>
       
-      <h1><b>ВСЕМ  ИГРОКАМ ПРИГОТОВИТЬСЯ,</b></h1>
-      {/* Кнопка для открытия модального окна */}
-      <button onClick={openModal} className="add-player-button">
-        <b>Добавить участника</b>
-      </button>
-      <button onClick={rebootGame} className="reboot-button">
-        <b>RebootGame</b>
-      </button>
+      
+      {isAdmin && (
+        <button onClick={rebootGame} className="reboot-button"><b>Reboot Game</b></button>
+      )}
 
-      {/* Модальное окно с формой добавления участника */}
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        className="Modal"
-        overlayClassName="Overlay"
-      >
-        <p><b>Добавить участника</b></p>
+      {isAdmin && (
+        <button onClick={() => setIsAdmin(false)} className="admin-logout-button">Выйти из режима администратора</button>
+      )}
+
+      <Modal isOpen={loginModalIsOpen} onRequestClose={closeLoginModal} className="Modal" overlayClassName="Overlay">
+        <h2 className="admin_panel">Вход администратора</h2>
+        <p className="admin_panel">Пиши пароль</p>
         <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Имя участника"
+          type="password"
+          value={passwordInput}
+          onChange={(e) => setPasswordInput(e.target.value)}
+          placeholder="Введите пароль"
         />
+        <button onClick={handleAdminLogin}>Войти</button>
+        <button onClick={closeLoginModal}>Отмена</button>
+      </Modal>
+
+      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="Modal" overlayClassName="Overlay">
+        <p><b>Добавить участника</b></p>
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Имя участника" />
         <select value={status} onChange={(e) => setStatus(e.target.value)}>
           <option value="Спрятался">Спрятался</option>
           <option value="Найден">Найден</option>
@@ -138,7 +143,7 @@ const removeHint = async (id, hintToRemove) => {
               <b><p>{player.name}</p></b>
               <p>Status: <span><b>{player.status}</b></span></p>
               <button onClick={() => toggleStatus(player.id, player.status)}>
-                Сменить статус
+                выходи дибил нашли тебя ...
               </button>
               <button onClick={() => addHint(player.id)} className="hint-button">+</button>
               <input
@@ -151,9 +156,11 @@ const removeHint = async (id, hintToRemove) => {
               {player.hints && player.hints.map((hint, index) => (
               <div key={index} className="hint">
                 <p>Подсказка: {hint}</p>
-                <button onClick={() => removeHint(player.id, hint)} className="remove-hint-button">
-                  &#10006; {/* Крестик для удаления */}
-                </button>
+                {isAdmin && (
+                  <button onClick={() => removeHint(player.id, hint)} className="remove-hint-button">
+                    &#10006;
+                  </button>
+                )}
               </div>
             ))}
             </div>
@@ -167,7 +174,7 @@ const removeHint = async (id, hintToRemove) => {
               <p>{player.name}</p>
               <p>Status: <span>{player.status}</span></p>
               <button onClick={() => toggleStatus(player.id, player.status)}>
-                Сменить статус
+                Сдаться ...
               </button>
             </div>
           ))}
@@ -182,15 +189,28 @@ const removeHint = async (id, hintToRemove) => {
               <p>{player.name}</p>
               <p>Status: <span>{player.status}</span></p>
               <button onClick={() => toggleStatus(player.id, player.status)}>
-                Вернуть в игру
+                Вернуться в игру
               </button>
               <button onClick={() => removePlayer(player.id)}>
-                Удалить
+                Удалиться 
               </button>
             </div>
           ))}
         </div>
       </div>
+      <footer className="footer">
+        <div className="footer-content">
+          <p className="footer-text">&copy; 2024 Игровые решения Closing opinion.</p>
+          <div className="footer-buttons">
+            {!isAdmin && (
+              <button onClick={openLoginModal} className="admin-login-button">
+                <b>Вход для администратора</b>
+              </button>
+            )}
+          </div>
+        </div>
+      </footer>
+
     </div>
   );
 }
