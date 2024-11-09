@@ -100,7 +100,7 @@ const removeHint = async (id, hintToRemove) => {
   return (
     <div className="App">
       
-      <h1><b>ВСЕМ  ИГРОКАМ ПРИГОТОВИТЬСЯ</b></h1>
+      <h1><b>ВСЕМ  ИГРОКАМ ПРИГОТОВИТЬСЯ,</b></h1>
       {/* Кнопка для открытия модального окна */}
       <button onClick={openModal} className="add-player-button">
         <b>Добавить участника</b>

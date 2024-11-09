@@ -1,20 +1,47 @@
 /* src/App.css */
-
+/* montserrat-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/montserrat-v29-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-500 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  src: url('../fonts/montserrat-v29-latin-500.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-900italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-weight: 900;
+  src: url('../fonts/montserrat-v29-latin-900italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
 /* Основной стиль приложения */
+
 .App {
-  padding-top: 100px;
-  font-family: Arial, sans-serif;
+  padding-top: 20px;
+  font-family: 'Montserrat', Arial, sans-serif; /* Установка шрифта для всего текста на странице */
+  font-weight: 500;
   text-align: center;
   background-image: url('../public/main_BG.svg');
   background-repeat: repeat;
   background-size: 100%;
   background-position: top;
+  background-attachment: fixed; /* Добавлено */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
+
 
 .players-list {
   width: 60%;
@@ -33,7 +60,20 @@
   }
 }
 
-h2,h1{
+h1 {
+  font-family: 'Montserrat', Arial, sans-serif; /* Подключение шрифта */
+  font-weight: 900;
+  font-style: italic;
+  color: rgb(252, 252, 252);
+  text-shadow: 
+    1px 1px 0 #2c2c2c,
+    -1px 1px 0 #2c2c2c,
+    1px -1px 0 #2c2c2c,
+    -1px -1px 0 #2c2c2c;
+}
+
+
+h2{
   color: white;
 
 }
@@ -56,7 +96,7 @@ h2,h1{
 }
 
 .Спрятался {
-  background-color: #007bff;
+  background-color: #1da4ff9d;
   color: white;
 }
 
@@ -71,7 +111,7 @@ h2,h1{
 }
 
 button {
-  background-color: orange;
+  background-color: rgb(255, 180, 41);
   color: white;
   border: none;
   padding: 8px 12px;
